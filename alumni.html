@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KIET Alumni Portal - Alumni Directory</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif; background-color: #f9fafb; min-height: 100vh; }
+        .navbar { background: white; border-bottom: 1px solid #e5e7eb; position: sticky; top: 0; z-index: 50; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .nav-container { max-width: 1280px; margin: 0 auto; padding: 1rem 1.5rem; }
+        .nav-header { display: flex; align-items: center; justify-between; margin-bottom: 1rem; }
+        .logo-section { display: flex; align-items: center; gap: 0.75rem; }
+        .logo { width: 48px; height: 48px; background: linear-gradient(to bottom right, #2563eb, #4f46e5); border-radius: 0.5rem; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.75rem; }
+        .logo-text h1 { font-size: 1.5rem; font-weight: bold; color: #111827; }
+        .logo-text p { font-size: 0.875rem; color: #6b7280; }
+        .user-section { display: flex; align-items: center; gap: 1rem; }
+        .messages-btn { padding: 0.5rem 1rem; color: #374151; background: none; border: none; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; }
+        .messages-btn:hover { color: #111827; }
+        .user-avatar { width: 40px; height: 40px; background: linear-gradient(to bottom right, #10b981, #059669); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; cursor: pointer; }
+        .nav-tabs { display: flex; gap: 0.25rem; flex-wrap: wrap; }
+        .tab-btn { padding: 0.75rem 1.5rem; border-radius: 0.5rem; font-weight: 500; border: none; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; transition: all 0.2s; background: none; color: #6b7280; text-decoration: none; }
+        .tab-btn:hover { background: #f3f4f6; }
+        .tab-btn.active { background: #2563eb; color: white; }
+        .main-content { max-width: 1280px; margin: 0 auto; padding: 2rem 1.5rem; }
+        .search-section { display: flex; gap: 1rem; margin-bottom: 1.5rem; }
+        .search-wrapper { flex: 1; position: relative; }
+        .search-icon { position: absolute; left: 0.75rem; top: 50%; transform: translateY(-50%); color: #9ca3af; }
+        .search-input { width: 100%; padding: 0.75rem 0.75rem 0.75rem 2.5rem; border: 1px solid #d1d5db; border-radius: 0.5rem; font-size: 1rem; }
+        .search-input:focus { outline: none; border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1); }
+        .btn-primary { padding: 0.75rem 1.5rem; background: #2563eb; color: white; border: none; border-radius: 0.5rem; cursor: pointer; font-weight: 500; }
+        .btn-primary:hover { background: #1d4ed8; }
+        .alumni-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 1.5rem; }
+        .alumni-card { background: white; border-radius: 0.75rem; padding: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); border: 1px solid #e5e7eb; transition: box-shadow 0.2s; }
+        .alumni-card:hover { box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .alumni-header { display: flex; gap: 1rem; }
+        .alumni-avatar { width: 64px; height: 64px; background: linear-gradient(to bottom right, #3b82f6, #9333ea); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 1.25rem; flex-shrink: 0; }
+        .alumni-info { flex: 1; }
+        .alumni-info h3 { font-size: 1.25rem; font-weight: bold; color: #111827; }
+        .alumni-role { color: #2563eb; font-weight: 500; margin: 0.25rem 0; }
+        .alumni-company { color: #6b7280; }
+        .alumni-location { display: flex; align-items: center; gap: 0.5rem; font-size: 0.875rem; color: #6b7280; margin-top: 0.5rem; flex-wrap: wrap; }
+        .expertise-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 0.75rem 0; }
+        .tag { padding: 0.25rem 0.75rem; background: #eff6ff; color: #1d4ed8; font-size: 0.75rem; border-radius: 9999px; }
+        .mentoring-badge { display: flex; align-items: center; gap: 0.5rem; color: #059669; font-size: 0.875rem; font-weight: 500; margin: 0.75rem 0; }
+        .alumni-actions { display: flex; gap: 0.5rem; margin-top: 1rem; }
+        .btn-connect { flex: 1; padding: 0.5rem 1rem; background: #2563eb; color: white; border: none; border-radius: 0.5rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.5rem; font-weight: 500; }
+        .btn-connect:hover { background: #1d4ed8; }
+        .btn-linkedin { padding: 0.5rem 1rem; border: 1px solid #d1d5db; background: white; border-radius: 0.5rem; cursor: pointer; color: #2563eb; }
+        .btn-linkedin:hover { background: #f9fafb; }
+        footer { background: white; border-top: 1px solid #e5e7eb; margin-top: 3rem; }
+        .footer-content { max-width: 1280px; margin: 0 auto; padding: 2rem 1.5rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+        .footer-info p:first-child { font-weight: 600; color: #111827; }
+        .footer-info p:last-child { font-size: 0.875rem; color: #6b7280; }
+        .footer-copyright { font-size: 0.875rem; color: #6b7280; }
+        @media (max-width: 768px) { .alumni-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-header">
+                <div class="logo-section">
+                    <div class="logo"><i class="fas fa-graduation-cap"></i></div>
+                    <div class="logo-text">
+                        <h1>KIET Alumni Portal</h1>
+                        <p>Ghaziabad, NCR</p>
+                    </div>
+                </div>
+                <div class="user-section">
+                    <button class="messages-btn"><i class="fas fa-envelope"></i> Messages</button>
+                    <div class="user-avatar">AR</div>
+                </div>
+            </div>
+            <div class="nav-tabs">
+                <a href="index.html" class="tab-btn"><i class="fas fa-home"></i> Home</a>
+                <a href="alumni.html" class="tab-btn active"><i class="fas fa-users"></i> Alumni Directory</a>
+                <a href="jobs.html" class="tab-btn"><i class="fas fa-briefcase"></i> Job Board</a>
+                <a href="stories.html" class="tab-btn"><i class="fas fa-award"></i> Success Stories</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="search-section">
+            <div class="search-wrapper">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" class="search-input" id="search-input" placeholder="Search alumni by name, company, or expertise...">
+            </div>
+            <button class="btn-primary">Filter</button>
+        </div>
+        <div class="alumni-grid" id="alumni-container"></div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-info">
+                <p>KIET Group of Institutions</p>
+                <p>Ghaziabad, Uttar Pradesh, India</p>
+            </div>
+            <div class="footer-copyright">© 2025 KIET Alumni Network. All rights reserved.</div>
+        </div>
+    </footer>
+
+    <script>
+        const alumni = [
+            { id: 1, name: "Priya Sharma", batch: "2018", company: "Google India", role: "Senior Software Engineer", location: "Bengaluru", expertise: ["Machine Learning", "Cloud Computing"], mentoring: true, image: "PS" },
+            { id: 2, name: "Rajesh Kumar", batch: "2015", company: "Amazon", role: "Product Manager", location: "Hyderabad", expertise: ["Product Strategy", "E-commerce"], mentoring: true, image: "RK" },
+            { id: 3, name: "Anita Desai", batch: "2016", company: "Microsoft", role: "Data Scientist", location: "Noida", expertise: ["Data Analytics", "AI"], mentoring: true, image: "AD" },
+            { id: 4, name: "Vikram Singh", batch: "2017", company: "Flipkart", role: "Engineering Lead", location: "Bengaluru", expertise: ["System Design", "Leadership"], mentoring: false, image: "VS" }
+        ];
+
+        function renderAlumni(list) {
+            const container = document.getElementById('alumni-container');
+            container.innerHTML = list.map(person => `
+                <div class="alumni-card">
+                    <div class="alumni-header">
+                        <div class="alumni-avatar">${person.image}</div>
+                        <div class="alumni-info">
+                            <h3>${person.name}</h3>
+                            <div class="alumni-role">${person.role}</div>
+                            <div class="alumni-company">${person.company}</div>
+                            <div class="alumni-location">
+                                <i class="fas fa-map-marker-alt"></i><span>${person.location}</span>
+                                <span>•</span>
+                                <i class="fas fa-graduation-cap"></i><span>Batch ${person.batch}</span>
+                            </div>
+                            <div class="expertise-tags">
+                                ${person.expertise.map(skill => `<span class="tag">${skill}</span>`).join('')}
+                            </div>
+                            ${person.mentoring ? '<div class="mentoring-badge"><i class="fas fa-star"></i><span>Available for Mentorship</span></div>' : ''}
+                            <div class="alumni-actions">
+                                <button class="btn-connect"><i class="fas fa-comment"></i> Connect</button>
+                                <button class="btn-linkedin"><i class="fab fa-linkedin"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        renderAlumni(alumni);
+
+        document.getElementById('search-input').addEventListener('input', (e) => {
+            const term = e.target.value.toLowerCase();
+            const filtered = alumni.filter(p => 
+                p.name.toLowerCase().includes(term) || 
+                p.company.toLowerCase().includes(term) || 
+                p.expertise.some(s => s.toLowerCase().includes(term))
+            );
+            renderAlumni(filtered);
+        });
+    </script>
+</body>
+</html>
